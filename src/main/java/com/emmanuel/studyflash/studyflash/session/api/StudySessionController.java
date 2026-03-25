@@ -5,6 +5,7 @@ import com.emmanuel.studyflash.studyflash.session.dto.AnswerFlashcardRequestDTO;
 import com.emmanuel.studyflash.studyflash.session.dto.AnswerFlashcardResponseDTO;
 import com.emmanuel.studyflash.studyflash.session.dto.StudySessionResponseDTO;
 import com.emmanuel.studyflash.studyflash.session.service.StudySessionService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/sessions")

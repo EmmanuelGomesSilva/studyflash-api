@@ -130,7 +130,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FlashCardCannotBeNullException.class)
     public ResponseEntity<ErrorResponse> handleFlashCardCannotBeNull(
-           FlashCardCannotBeNullException ex,
+            FlashCardCannotBeNullException ex,
             HttpServletRequest request) {
 
         return buildError(ex, HttpStatus.BAD_REQUEST, request);
@@ -168,6 +168,22 @@ public class GlobalExceptionHandler {
         return buildError(ex, HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler(FlashCardInactiveException.class)
+    public ResponseEntity<ErrorResponse> handleFlashCardInactive(
+            FlashCardInactiveException ex,
+            HttpServletRequest request) {
+
+        return buildError(ex, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(DailyReviewLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleDailyReviewLimitExceeded(
+            DailyReviewLimitExceededException ex,
+            HttpServletRequest request) {
+
+        return buildError(ex, HttpStatus.TOO_MANY_REQUESTS, request);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(
             Exception ex,
@@ -175,7 +191,6 @@ public class GlobalExceptionHandler {
 
         return buildError(ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
-
 
 
 }

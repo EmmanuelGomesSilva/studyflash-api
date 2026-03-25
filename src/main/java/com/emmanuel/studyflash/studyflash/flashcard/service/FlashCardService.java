@@ -8,9 +8,7 @@ import com.emmanuel.studyflash.studyflash.flashcard.dto.FlashCardUpdateResponseD
 import com.emmanuel.studyflash.studyflash.flashcard.repository.FlashCardRepository;
 import com.emmanuel.studyflash.studyflash.session.domain.StudySession;
 import com.emmanuel.studyflash.studyflash.session.repository.StudySessionRepository;
-import com.emmanuel.studyflash.studyflash.shared.exception.FlashCardNotFoundException;
-import com.emmanuel.studyflash.studyflash.shared.exception.SessionNotFoundException;
-import com.emmanuel.studyflash.studyflash.shared.exception.TopicNotFoundException;
+import com.emmanuel.studyflash.studyflash.shared.exception.*;
 import com.emmanuel.studyflash.studyflash.studyresult.domain.StudyResult;
 import com.emmanuel.studyflash.studyflash.studyresult.repository.StudyResultRepository;
 import com.emmanuel.studyflash.studyflash.topic.domain.Topic;
@@ -22,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,12 +45,29 @@ public class FlashCardService {
     @Transactional
     public void review(UUID sessionId, UUID flashcardId, boolean correct, UUID userId) {
 
+        LocalDate today = LocalDate.now();
+
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
+        long count = studyResultRepository.countByUserIdAndAnsweredAtBetween(userId, startOfDay, endOfDay );
+
+         if (count >= 20){
+             throw new DailyReviewLimitExceededException();
+         }
+
+
+        StudySession session = studySessionRepository.findByIdAndUserId(sessionId, userId)
+                .orElseThrow(() -> new SessionNotFoundException(sessionId));
+
+        if (!session.isActive()){
+            throw new SessionNotActiveException();
+        }
 
         FlashCard flashCard = flashCardRepository
                 .findByIdAndTopicSubjectUserId(flashcardId, userId)
                 .orElseThrow(() -> new FlashCardNotFoundException(flashcardId, userId));
-        StudySession session = studySessionRepository.findById(sessionId)
-                .orElseThrow(() -> new SessionNotFoundException(sessionId));
+
 
         flashCard.review(correct);
 
@@ -60,7 +75,8 @@ public class FlashCardService {
                 session,
                 flashCard,
                 correct,
-                null
+                0,
+                userId
         );
 
         session.recordResult(result);

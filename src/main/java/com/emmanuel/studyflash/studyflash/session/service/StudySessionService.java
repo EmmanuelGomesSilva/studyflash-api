@@ -60,7 +60,8 @@ public class StudySessionService {
                 session,
                 flashCard,
                 isCorrect,
-                dto.responseTime()
+                dto.responseTime(),
+                userId
         );
 
         studyResultRepository.save(studyResult);

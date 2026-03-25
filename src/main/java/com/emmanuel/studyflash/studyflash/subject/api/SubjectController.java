@@ -7,6 +7,7 @@ import com.emmanuel.studyflash.studyflash.subject.dto.SubjectUpdateRequest;
 import com.emmanuel.studyflash.studyflash.subject.dto.SubjectUpdateResponse;
 import com.emmanuel.studyflash.studyflash.subject.service.SubjectService;
 import com.emmanuel.studyflash.studyflash.user.domain.User;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/subjects")

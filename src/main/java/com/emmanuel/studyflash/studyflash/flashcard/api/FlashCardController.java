@@ -3,6 +3,7 @@ package com.emmanuel.studyflash.studyflash.flashcard.api;
 import com.emmanuel.studyflash.studyflash.auth.security.UserPrincipal;
 import com.emmanuel.studyflash.studyflash.flashcard.dto.*;
 import com.emmanuel.studyflash.studyflash.flashcard.service.FlashCardService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/flashcards")

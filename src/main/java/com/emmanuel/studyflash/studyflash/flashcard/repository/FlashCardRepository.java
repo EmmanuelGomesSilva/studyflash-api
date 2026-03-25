@@ -12,8 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FlashCardRepository extends JpaRepository<FlashCard, UUID> {
-    Optional<FlashCard> findByTopicIdAndTopicSubjectUserId(
-            UUID topicId, UUID userId);
+
     Page<FlashCard> findByTopicSubjectUserId(UUID userId, Pageable pageable);
 
     Optional<FlashCard> findByIdAndTopicSubjectUserId(UUID id, UUID userId);

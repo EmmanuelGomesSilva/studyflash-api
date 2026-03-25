@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface StudySessionRepository extends JpaRepository<StudySession, UUID> {
 
     Optional<StudySession> findByIdAndUserId(UUID sessionId, UUID userId);
+
 }

@@ -110,7 +110,7 @@ public class StudySession {
     public void finish(){
 
         if (!isActive()){
-            throw new IllegalStateException("Session is not active");
+            throw new SessionNotActiveException();
         }
 
         endTime = LocalDateTime.now();

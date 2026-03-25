@@ -1,10 +1,7 @@
 package com.emmanuel.studyflash.studyflash.flashcard.domain;
 
 import com.emmanuel.studyflash.studyflash.flashcard.domain.enums.DifficultyLevel;
-import com.emmanuel.studyflash.studyflash.shared.exception.InvalidAnswerException;
-import com.emmanuel.studyflash.studyflash.shared.exception.InvalidQualityException;
-import com.emmanuel.studyflash.studyflash.shared.exception.InvalidQuestionException;
-import com.emmanuel.studyflash.studyflash.shared.exception.TopicRequiredException;
+import com.emmanuel.studyflash.studyflash.shared.exception.*;
 import com.emmanuel.studyflash.studyflash.studyresult.domain.StudyResult;
 import com.emmanuel.studyflash.studyflash.topic.domain.Topic;
 import com.emmanuel.studyflash.studyflash.util.StringNormalizer;
@@ -48,7 +45,7 @@ public class FlashCard {
     @Column(name = "total_reviews", nullable = false)
     private Integer totalReviews;
 
-    @Column(name = "accuracy_rate")
+    @Column(name = "accuracy_rate", nullable = false)
     private Double accuracyRate;
 
     @Column(name = "repetitions", nullable = false)
@@ -63,6 +60,9 @@ public class FlashCard {
     @Column(name = "total_correct", nullable = false)
     private Integer totalCorrect;
 
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "difficultyLevel")
     private DifficultyLevel difficultyLevel;
@@ -75,6 +75,10 @@ public class FlashCard {
     private List<StudyResult> results = new ArrayList<>();
 
     public void review(boolean correct) {
+
+        if (!this.active){
+            throw new FlashCardInactiveException();
+        }
 
         int quality = correct ? 4 : 2;
         review(quality);
@@ -165,6 +169,7 @@ public class FlashCard {
         flashCard.question = validateQuestion(question);
         flashCard.answer = validateAnswer(answer);
         flashCard.topic = validateTopic(topic);
+        flashCard.active = true;
 
         flashCard.createdAt = LocalDate.now();
 
@@ -189,5 +194,6 @@ public class FlashCard {
 
         return normalizedUser != null && normalizedUser.equalsIgnoreCase(normalizedAnswer);
     }
+
 
 }
